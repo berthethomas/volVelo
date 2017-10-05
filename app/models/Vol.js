@@ -30,10 +30,10 @@ Vol.prototype = {
 		var object = this;
 
 		const query = 'INSERT INTO ' +
-										'vol (vol_id, date, location, owner) ' +
-										'VALUES( ?, ?, ?, ?)';
+										'vol (vol_id, date, new, location, owner) ' +
+										'VALUES( ?, ?, ?, ?, ?)';
 
-		client.execute(query, [ uuidv1(), now, object.location, object.owner ], { prepare: true}, function(err, result) {
+		client.execute(query, [ uuidv1(), now, true, object.location, object.owner ], { prepare: true}, function(err, result) {
 			console.log(err);
 			callback(err, 'ok');
 		});
@@ -52,6 +52,41 @@ Vol.getAll = function(callback)
 	client.execute(query, null, { prepare: true}, function(err, result) {
 		console.log(err);
 		callback(result['rows']);
+	});
+}
+
+Vol.getNews = function(callback)
+{
+	const query = 'SELECT * FROM vol WHERE new = true';
+
+	client.execute(query, null, { prepare: true}, function(err, result) {
+		console.log(err);
+
+		var news   = result['rows'],
+			idList = '',
+			first  = true;
+
+		console.log(news);
+
+		news.map(function (item) {
+			if (! first) {
+				idList = idList + ', ';
+			} else {
+				first = false;
+			}
+
+			idList = idList + item['vol_id'];
+		});
+
+		if (news.length && idList != '') {
+			const query = 'UPDATE volvelo.vol SET new=false WHERE vol_id IN ('+idList+')';
+		
+			client.execute(query, null, { prepare: true}, function(err, result) {
+				callback(news);
+			});
+		} else {
+			callback(news);
+		}
 	});
 }
 
