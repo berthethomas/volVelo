@@ -7,9 +7,9 @@ router.post('/add', function(req, res, next){
 		"owner" : req.body.owner,
 		"location" : req.body.location
 	};
-	Vol.addVol(obj, function(vol){
+	Vol.addVol(obj, function(err, vol){
 		console.log(vol);
-		res.setHeader('Content-Type', 'application/json');
+		res.header('Content-Type', 'application/json');
 		res.send(JSON.stringify(vol));
 	})
 })

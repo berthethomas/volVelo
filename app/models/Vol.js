@@ -35,6 +35,7 @@ Vol.prototype = {
 
 		client.execute(query, [ uuidv1(), now, object.location, object.owner ], { prepare: true}, function(err, result) {
 			console.log(err);
+			callback(err, 'ok');
 		});
 	},
 };
