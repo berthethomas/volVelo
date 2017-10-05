@@ -1,0 +1,133 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "L'API volVelo permet de référencer tout les vélos volés en fonction du propriétaire et de sa localisation. Les données sont stockées dans une base NoSQL.",
+    "version": "1.0.0",
+    "title": "volVelo",
+    "contact": {
+      "email": "berthe.thomas01@gmail.com"
+    },
+    "license": {
+      "name": "leroux.tanguy.51@gmail.com souchu.laura@gmail.com"
+    }
+  },
+  "host": "localhost:8004",
+  "tags": [
+    {
+      "name": "volVelo",
+      "description": "API permettant de déclarer si un vélo à été voler et d'obtenir la liste des vélos volés"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/vol": {
+      "get": {
+        "tags": [
+          "volVelo"
+        ],
+        "summary": "Retourne la liste des vélos volés",
+        "description": "",
+        "operationId": "getVol",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Opération réussie",
+            "schema": {
+              "$ref": "#/definitions/Vol"
+            }
+          }
+        }
+      }
+    },
+    "/vol/add": {
+      "post": {
+        "tags": [
+          "volVelo"
+        ],
+        "summary": "Ajouter un vélo volé",
+        "description": "",
+        "operationId": "addVol",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "formData",
+            "description": "Propriétaire du vélo volé",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "location",
+            "in": "formData",
+            "description": "Localisation géographique du vol",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
+    },
+    "/news": {
+      "get": {
+        "tags": [
+          "volVelo"
+        ],
+        "summary": "Retourne la liste des nouveaux vélos volés",
+        "description": "",
+        "operationId": "getNewVols",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Opération réussie",
+            "schema": {
+              "$ref": "#/definitions/Vol"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Vol": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "vol_id": {
+            "type": "integer",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "location": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "new": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
